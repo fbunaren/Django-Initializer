@@ -55,9 +55,28 @@ def config_project_urls():
 def do_collectstatic():
     os.popen("cd " + project_name + " & python manage.py collectstatic").read()
 
+# Add Procfile and Requirements.txt
+def add_procfile_requirements():
+    with open(project_name + "/requirements.txt","w+") as f:
+        f.write('''asgiref==3.2.7
+Django==3.0.5
+pytz==2019.3
+sqlparse==0.3.1
+whitenoise==5.0.1
+Wikidata==0.6.1
+requests==2.23.0
+gunicorn==19.7.1
+django-environ==0.4.4
+gunicorn==19.7.1
+urllib3==1.22''')
+
+    with open(project_name + "/Procfile","w+") as f:
+        f.write('web: gunicorn {}.wsgi --log-file -'.format(project_name))
+
 # Apply Configurations
 init_project_app()
 config_settings()
+add_procfile_requirements()
 do_collectstatic()
 
 print("Finished")
